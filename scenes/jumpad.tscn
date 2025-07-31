@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3 uid="uid://b2hmxwf7odj2i"]
+
+[ext_resource type="Script" uid="uid://walxge5pmywr" path="res://scripts/jumpad.gd" id="1_e5bxg"]
+[ext_resource type="Texture2D" uid="uid://cp4tjdfrjuu78" path="res://assets/images/items.png" id="2_e1pdd"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4xn4l"]
+size = Vector2(18, 20)
+
+[node name="Jumpad" type="Area2D" node_paths=PackedStringArray("cooldownTimer")]
+script = ExtResource("1_e5bxg")
+launch_speed = 500.0
+cooldownTimer = NodePath("cooldown")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_e1pdd")
+region_enabled = true
+region_rect = Rect2(48, 0, 16, 16)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_4xn4l")
+
+[node name="cooldown" type="Timer" parent="."]
+wait_time = 3.0
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="cooldown" to="." method="_on_cooldown_timeout"]

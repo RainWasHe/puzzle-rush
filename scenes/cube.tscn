@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://dmkd7ld6lgdqy"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_5rbgv"]
+load_path = "res://.godot/imported/items.png-4b6e1e121326a6fdd441b53d99ff45dd.ctex"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8viuf"]
+size = Vector2(16, 16)
+
+[node name="Cube" type="RigidBody2D"]
+collision_layer = 2
+collision_mask = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="." groups=["launchable"]]
+texture = SubResource("CompressedTexture2D_5rbgv")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_8viuf")

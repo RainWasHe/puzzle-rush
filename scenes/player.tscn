@@ -1,13 +1,25 @@
-[gd_scene load_steps=3 format=3 uid="uid://cy6u0hichvs3r"]
+[gd_scene load_steps=10 format=3 uid="uid://cy6u0hichvs3r"]
 
 [ext_resource type="Script" uid="uid://ca1tiuj460ajy" path="res://scripts/player.gd" id="1_7r2uy"]
+[ext_resource type="Script" uid="uid://cpu3vbkktpbti" path="res://scripts/state_machine.gd" id="2_g2els"]
+[ext_resource type="Script" uid="uid://dwv5g448hf441" path="res://scripts/idle.gd" id="3_qhqgy"]
+[ext_resource type="Script" uid="uid://dkk7botvustj8" path="res://scripts/jump.gd" id="4_dqkch"]
+[ext_resource type="Script" uid="uid://sogihk0kq01f" path="res://scripts/fall.gd" id="5_qlg0r"]
+[ext_resource type="Script" uid="uid://cuf74he3k4s8s" path="res://scripts/move.gd" id="6_tuyoq"]
+[ext_resource type="Script" uid="uid://dvjw2m101se37" path="res://scripts/rewind.gd" id="7_fjrip"]
+[ext_resource type="PackedScene" uid="uid://dqn2qdo6bulus" path="res://scenes/timer.tscn" id="8_smehm"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xwa2j"]
 size = Vector2(8, 14)
 
-[node name="Player" type="CharacterBody2D"]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("rewind_state", "collision_shape")]
 z_index = 1
+collision_layer = 3
 script = ExtResource("1_7r2uy")
+rewind_state = NodePath("stateMachine/rewind")
+collision_shape = NodePath("CollisionShape2D")
+
+[node name="animation" type="AnimatedSprite2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_xwa2j")
@@ -15,3 +27,69 @@ shape = SubResource("RectangleShape2D_xwa2j")
 [node name="Polygon2D" type="Polygon2D" parent="."]
 position = Vector2(-1, 1)
 polygon = PackedVector2Array(-4, -9, 6, -9, 6, 7, -4, 7)
+
+[node name="stateMachine" type="Node" parent="." node_paths=PackedStringArray("starting_state", "current_state", "text")]
+script = ExtResource("2_g2els")
+starting_state = NodePath("idle")
+current_state = NodePath("idle")
+text = NodePath("../TextEdit")
+
+[node name="idle" type="Node" parent="stateMachine" node_paths=PackedStringArray("fall_state", "jump_state", "move_state", "rewind_state")]
+script = ExtResource("3_qhqgy")
+fall_state = NodePath("../fall")
+jump_state = NodePath("../jump")
+move_state = NodePath("../move")
+rewind_state = NodePath("../rewind")
+
+[node name="jump" type="Node" parent="stateMachine" node_paths=PackedStringArray("fall_state", "idle_state", "move_state", "rewind_state", "jump_buffer_timer")]
+script = ExtResource("4_dqkch")
+fall_state = NodePath("../fall")
+idle_state = NodePath("../idle")
+move_state = NodePath("../move")
+rewind_state = NodePath("../rewind")
+jump_buffer_timer = NodePath("jump_buffer_timer")
+
+[node name="jump_buffer_timer" type="Timer" parent="stateMachine/jump"]
+wait_time = 0.3
+
+[node name="fall" type="Node" parent="stateMachine" node_paths=PackedStringArray("idle_state", "jump_state", "move_state", "rewind_state", "jump_buffer_timer")]
+script = ExtResource("5_qlg0r")
+idle_state = NodePath("../idle")
+jump_state = NodePath("../jump")
+move_state = NodePath("../move")
+rewind_state = NodePath("../rewind")
+jump_buffer_timer = NodePath("../jump/jump_buffer_timer")
+
+[node name="move" type="Node" parent="stateMachine" node_paths=PackedStringArray("fall_state", "idle_state", "jump_state", "rewind_state")]
+script = ExtResource("6_tuyoq")
+fall_state = NodePath("../fall")
+idle_state = NodePath("../idle")
+jump_state = NodePath("../jump")
+rewind_state = NodePath("../rewind")
+
+[node name="rewind" type="Node" parent="stateMachine" node_paths=PackedStringArray("fall_state", "move_state", "idle_state")]
+script = ExtResource("7_fjrip")
+fall_state = NodePath("../fall")
+move_state = NodePath("../move")
+idle_state = NodePath("../idle")
+
+[node name="TextEdit" type="TextEdit" parent="."]
+offset_left = -104.0
+offset_top = -39.0
+offset_right = 76.0
+offset_bottom = -4.0
+scale = Vector2(0.475, 0.475)
+text = "State:"
+
+[node name="TextEdit2" type="TextEdit" parent="."]
+offset_left = 21.0
+offset_top = -39.0
+offset_right = 201.0
+offset_bottom = -2.0
+scale = Vector2(0.475, 0.475)
+text = "jumpBuffer:"
+
+[node name="Timer" parent="." groups=["launchable"] instance=ExtResource("8_smehm")]
+
+[connection signal="timeout" from="stateMachine/jump/jump_buffer_timer" to="stateMachine/jump" method="_on_jump_buffer_timer_timeout"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

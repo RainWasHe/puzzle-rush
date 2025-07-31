@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://dqn2qdo6bulus"]
+
+[ext_resource type="Script" uid="uid://djg8m8uiw2k3h" path="res://scripts/timer.gd" id="1_srplv"]
+
+[node name="Timer" type="Timer" node_paths=PackedStringArray("progressBar")]
+wait_time = 10.0
+autostart = true
+script = ExtResource("1_srplv")
+progressBar = NodePath("ProgressBar")
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+offset_left = 255.0
+offset_top = 40.0
+offset_right = 510.0
+offset_bottom = 67.0
+scale = Vector2(0.4, 0.4)
+value = 5.0
