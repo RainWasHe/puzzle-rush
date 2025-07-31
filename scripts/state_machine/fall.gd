@@ -6,7 +6,7 @@ extends State
 @export var move_state: State
 @export var rewind_state: State
 @export var jump_buffer_timer: Timer
-
+@export var wind: CPUParticles2D
 
 func process_input(input: InputEvent) -> State:
 	if(input.is_action_pressed("move_left") or input.is_action_pressed("move_right")):
@@ -21,6 +21,17 @@ func process_input(input: InputEvent) -> State:
 	return null
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func process_physics(delta: float) -> State:
+	#if(abs(parent.velocity.y) > 200.0):
+		#wind.visible = true
+		#wind.modulate.a = lerp(0, 255, 0.1)
+		#wind.speed_scale = parent.velocity.y / 32
+		#wind.gravity = parent.velocity / 32
+		#wind.emitting = true
+	#else:
+		#wind.modulate.a = lerp(255, 0, 0.1)
+		#wind.visible = false
+		#wind.emitting = false
+		
 	if !parent.is_on_floor():
 		parent.velocity.y += parent.gravity * delta
 		parent.move_and_slide()

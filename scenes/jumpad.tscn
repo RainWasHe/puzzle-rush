@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://b2hmxwf7odj2i"]
+[gd_scene load_steps=15 format=3 uid="uid://b2hmxwf7odj2i"]
 
 [ext_resource type="Script" uid="uid://walxge5pmywr" path="res://scripts/jumpad.gd" id="1_e5bxg"]
 [ext_resource type="Texture2D" uid="uid://cp4tjdfrjuu78" path="res://assets/images/items.png" id="2_e1pdd"]
@@ -6,21 +6,116 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4xn4l"]
 size = Vector2(18, 20)
 
-[node name="Jumpad" type="Area2D" node_paths=PackedStringArray("cooldownTimer")]
+[sub_resource type="AtlasTexture" id="AtlasTexture_e5bxg"]
+atlas = ExtResource("2_e1pdd")
+region = Rect2(0, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e1pdd"]
+atlas = ExtResource("2_e1pdd")
+region = Rect2(16, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4xn4l"]
+atlas = ExtResource("2_e1pdd")
+region = Rect2(32, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_50r6l"]
+atlas = ExtResource("2_e1pdd")
+region = Rect2(48, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p56ml"]
+atlas = ExtResource("2_e1pdd")
+region = Rect2(64, 64, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_huaid"]
+atlas = ExtResource("2_e1pdd")
+region = Rect2(80, 64, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2ogfm"]
+atlas = ExtResource("2_e1pdd")
+region = Rect2(96, 64, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ggaey"]
+atlas = ExtResource("2_e1pdd")
+region = Rect2(112, 64, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_e6bbc"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e5bxg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e1pdd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4xn4l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_50r6l")
+}],
+"loop": true,
+"name": &"default",
+"speed": 2.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p56ml")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_huaid")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2ogfm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ggaey")
+}],
+"loop": false,
+"name": &"launch",
+"speed": 5.0
+}]
+
+[sub_resource type="Curve" id="Curve_e5bxg"]
+_data = [Vector2(0.00568181, 0.539326), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_e1pdd"]
+colors = PackedColorArray(0.360784, 0.941176, 0.976471, 1, 0.0666667, 0.717647, 0.756863, 0.415686)
+
+[node name="Jumpad" type="Area2D" node_paths=PackedStringArray("cooldownTimer", "AnimatedSprite", "particle")]
 script = ExtResource("1_e5bxg")
 launch_speed = 500.0
 cooldownTimer = NodePath("cooldown")
-
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_e1pdd")
-region_enabled = true
-region_rect = Rect2(48, 0, 16, 16)
+AnimatedSprite = NodePath("AnimatedSprite2D")
+particle = NodePath("CPUParticles2D")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_4xn4l")
 
 [node name="cooldown" type="Timer" parent="."]
-wait_time = 3.0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_e6bbc")
+animation = &"launch"
+autoplay = "default"
+frame = 1
+frame_progress = 0.655414
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+rotation = 1.5708
+emitting = false
+amount = 20
+lifetime = 0.1
+one_shot = true
+speed_scale = 0.5
+spread = 90.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 222.22
+initial_velocity_max = 222.22
+scale_amount_min = 0.0
+scale_amount_max = 11.1
+scale_amount_curve = SubResource("Curve_e5bxg")
+color_ramp = SubResource("Gradient_e1pdd")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="timeout" from="cooldown" to="." method="_on_cooldown_timeout"]

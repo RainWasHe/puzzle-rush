@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://dlhq4181xfr72"]
+
+[node name="Camera" type="Camera2D"]
+zoom = Vector2(3, 3)
+limit_bottom = 230
+limit_smoothed = true
+position_smoothing_enabled = true
+position_smoothing_speed = 2.0
+drag_horizontal_enabled = true
+drag_vertical_enabled = true
+drag_left_margin = 0.1
+drag_top_margin = 0.1
+drag_right_margin = 0.1
+drag_bottom_margin = 0.1

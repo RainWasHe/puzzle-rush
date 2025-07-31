@@ -6,10 +6,12 @@ extends State
 @export var rewind_state: State
 @export var jump_force: float = 400.0
 @export var jump_buffer_timer: Timer
+@export var dust: CPUParticles2D
 
 var jump_buffer: bool = false
 
 func enter() -> void:
+	dust.emitting = true
 	parent.velocity.y = -jump_force
 	jump_buffer = false
 

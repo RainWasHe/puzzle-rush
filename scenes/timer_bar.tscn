@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://8hw1pskl3lib"]
+
+[ext_resource type="Texture2D" uid="uid://bqu2wuvvwybe1" path="res://assets/images/progress_bar_not_field.png" id="1_y3b4w"]
+[ext_resource type="Texture2D" uid="uid://dyw7otp1r325l" path="res://assets/images/progress.png" id="2_3v4ae"]
+[ext_resource type="Script" uid="uid://5d14ypjq1fn3" path="res://scripts/timer.gd" id="3_pw5qu"]
+
+[node name="TimerBar" type="TextureProgressBar" node_paths=PackedStringArray("timer")]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -69.0
+offset_right = 69.0
+offset_bottom = 33.0
+grow_horizontal = 2
+value = 25.0
+nine_patch_stretch = true
+texture_over = ExtResource("1_y3b4w")
+texture_progress = ExtResource("2_3v4ae")
+script = ExtResource("3_pw5qu")
+timer = NodePath("Timer")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 10.0

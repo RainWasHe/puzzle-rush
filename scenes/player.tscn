@@ -1,31 +1,79 @@
-[gd_scene load_steps=10 format=3 uid="uid://cy6u0hichvs3r"]
+[gd_scene load_steps=19 format=3 uid="uid://cy6u0hichvs3r"]
 
 [ext_resource type="Script" uid="uid://ca1tiuj460ajy" path="res://scripts/player.gd" id="1_7r2uy"]
-[ext_resource type="Script" uid="uid://cpu3vbkktpbti" path="res://scripts/state_machine.gd" id="2_g2els"]
-[ext_resource type="Script" uid="uid://dwv5g448hf441" path="res://scripts/idle.gd" id="3_qhqgy"]
-[ext_resource type="Script" uid="uid://dkk7botvustj8" path="res://scripts/jump.gd" id="4_dqkch"]
-[ext_resource type="Script" uid="uid://sogihk0kq01f" path="res://scripts/fall.gd" id="5_qlg0r"]
-[ext_resource type="Script" uid="uid://cuf74he3k4s8s" path="res://scripts/move.gd" id="6_tuyoq"]
-[ext_resource type="Script" uid="uid://dvjw2m101se37" path="res://scripts/rewind.gd" id="7_fjrip"]
-[ext_resource type="PackedScene" uid="uid://dqn2qdo6bulus" path="res://scenes/timer.tscn" id="8_smehm"]
+[ext_resource type="Script" uid="uid://cpu3vbkktpbti" path="res://scripts/state_machine/state_machine.gd" id="2_g2els"]
+[ext_resource type="Script" uid="uid://dwv5g448hf441" path="res://scripts/state_machine/idle.gd" id="3_qhqgy"]
+[ext_resource type="Script" uid="uid://dkk7botvustj8" path="res://scripts/state_machine/jump.gd" id="4_dqkch"]
+[ext_resource type="Script" uid="uid://sogihk0kq01f" path="res://scripts/state_machine/fall.gd" id="5_qlg0r"]
+[ext_resource type="Script" uid="uid://cuf74he3k4s8s" path="res://scripts/state_machine/move.gd" id="6_tuyoq"]
+[ext_resource type="Script" uid="uid://dvjw2m101se37" path="res://scripts/state_machine/rewind.gd" id="7_fjrip"]
+[ext_resource type="Script" uid="uid://wsgmmlgnqiwk" path="res://scripts/state_machine/slide.gd" id="8_3v2ag"]
+[ext_resource type="PackedScene" uid="uid://8hw1pskl3lib" path="res://scenes/timer_bar.tscn" id="8_smehm"]
+[ext_resource type="Script" uid="uid://d15nobs3uuxeb" path="res://addons/postfx/nodes/PostFX.gd" id="9_y4r1p"]
+[ext_resource type="Script" uid="uid://bvbw3ejkm2bck" path="res://addons/postfx/scripts/FXBase.gd" id="10_3v2ag"]
+[ext_resource type="Script" uid="uid://cqqc7s7kp8uem" path="res://addons/postfx/effects/VignetteFX.gd" id="11_jej6c"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3v2ag"]
+size = Vector2(12, 7)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xwa2j"]
-size = Vector2(8, 14)
+size = Vector2(8, 13)
+
+[sub_resource type="Resource" id="Resource_3v2ag"]
+script = ExtResource("11_jej6c")
+intensity = 0.1
+color = Color(0, 0, 0, 1)
+enabled = true
+metadata/_custom_type_script = "uid://cqqc7s7kp8uem"
+
+[sub_resource type="Gradient" id="Gradient_smehm"]
+offsets = PackedFloat32Array(0.26, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="Gradient" id="Gradient_ur7pv"]
+offsets = PackedFloat32Array(0.48, 1)
+colors = PackedColorArray(0.641934, 0.641934, 0.641934, 1, 1, 1, 1, 0)
+
+[sub_resource type="GDScript" id="GDScript_jej6c"]
+script/source = "extends CPUParticles2D
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	pass
+"
 
 [node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("rewind_state", "collision_shape")]
-z_index = 1
-collision_layer = 3
+z_index = 6
+collision_layer = 7
 script = ExtResource("1_7r2uy")
 rewind_state = NodePath("stateMachine/rewind")
-collision_shape = NodePath("CollisionShape2D")
+collision_shape = NodePath("normalHitbox")
 
 [node name="animation" type="AnimatedSprite2D" parent="."]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="slideHitbox" type="CollisionShape2D" parent="."]
+position = Vector2(0, 5.5)
+shape = SubResource("RectangleShape2D_3v2ag")
+disabled = true
+
+[node name="slide" type="Polygon2D" parent="slideHitbox"]
+visible = false
+position = Vector2(-2, -3.5)
+color = Color(0.312628, 0.457911, 0.914759, 1)
+polygon = PackedVector2Array(-5, -1, 9, -1, 9, 7, -5, 7)
+
+[node name="normalHitbox" type="CollisionShape2D" parent="."]
+position = Vector2(0, 0.5)
 shape = SubResource("RectangleShape2D_xwa2j")
 
-[node name="Polygon2D" type="Polygon2D" parent="."]
-position = Vector2(-1, 1)
+[node name="normal" type="Polygon2D" parent="normalHitbox"]
+position = Vector2(-1, 0.5)
 polygon = PackedVector2Array(-4, -9, 6, -9, 6, 7, -4, 7)
 
 [node name="stateMachine" type="Node" parent="." node_paths=PackedStringArray("starting_state", "current_state", "text")]
@@ -34,44 +82,59 @@ starting_state = NodePath("idle")
 current_state = NodePath("idle")
 text = NodePath("../TextEdit")
 
-[node name="idle" type="Node" parent="stateMachine" node_paths=PackedStringArray("fall_state", "jump_state", "move_state", "rewind_state")]
+[node name="idle" type="Node" parent="stateMachine" node_paths=PackedStringArray("fall_state", "jump_state", "move_state", "rewind_state", "slide_state", "wind")]
 script = ExtResource("3_qhqgy")
 fall_state = NodePath("../fall")
 jump_state = NodePath("../jump")
 move_state = NodePath("../move")
 rewind_state = NodePath("../rewind")
+slide_state = NodePath("../slide")
+wind = NodePath("../../wind")
 
-[node name="jump" type="Node" parent="stateMachine" node_paths=PackedStringArray("fall_state", "idle_state", "move_state", "rewind_state", "jump_buffer_timer")]
+[node name="jump" type="Node" parent="stateMachine" node_paths=PackedStringArray("fall_state", "idle_state", "move_state", "rewind_state", "jump_buffer_timer", "dust")]
 script = ExtResource("4_dqkch")
 fall_state = NodePath("../fall")
 idle_state = NodePath("../idle")
 move_state = NodePath("../move")
 rewind_state = NodePath("../rewind")
 jump_buffer_timer = NodePath("jump_buffer_timer")
+dust = NodePath("../../dust")
 
 [node name="jump_buffer_timer" type="Timer" parent="stateMachine/jump"]
 wait_time = 0.3
 
-[node name="fall" type="Node" parent="stateMachine" node_paths=PackedStringArray("idle_state", "jump_state", "move_state", "rewind_state", "jump_buffer_timer")]
+[node name="fall" type="Node" parent="stateMachine" node_paths=PackedStringArray("idle_state", "jump_state", "move_state", "rewind_state", "jump_buffer_timer", "wind")]
 script = ExtResource("5_qlg0r")
 idle_state = NodePath("../idle")
 jump_state = NodePath("../jump")
 move_state = NodePath("../move")
 rewind_state = NodePath("../rewind")
 jump_buffer_timer = NodePath("../jump/jump_buffer_timer")
+wind = NodePath("../../wind")
 
-[node name="move" type="Node" parent="stateMachine" node_paths=PackedStringArray("fall_state", "idle_state", "jump_state", "rewind_state")]
+[node name="move" type="Node" parent="stateMachine" node_paths=PackedStringArray("fall_state", "idle_state", "jump_state", "rewind_state", "slide_state")]
 script = ExtResource("6_tuyoq")
 fall_state = NodePath("../fall")
 idle_state = NodePath("../idle")
 jump_state = NodePath("../jump")
 rewind_state = NodePath("../rewind")
+slide_state = NodePath("../slide")
 
 [node name="rewind" type="Node" parent="stateMachine" node_paths=PackedStringArray("fall_state", "move_state", "idle_state")]
 script = ExtResource("7_fjrip")
 fall_state = NodePath("../fall")
 move_state = NodePath("../move")
 idle_state = NodePath("../idle")
+
+[node name="slide" type="Node" parent="stateMachine" node_paths=PackedStringArray("slideHitbox", "normalHitbox", "slidePolygon", "normalPolygon", "jump_state", "move_state", "rewind_state")]
+script = ExtResource("8_3v2ag")
+slideHitbox = NodePath("../../slideHitbox")
+normalHitbox = NodePath("../../normalHitbox")
+slidePolygon = NodePath("../../slideHitbox/slide")
+normalPolygon = NodePath("../../normalHitbox/normal")
+jump_state = NodePath("../jump")
+move_state = NodePath("../move")
+rewind_state = NodePath("../rewind")
 
 [node name="TextEdit" type="TextEdit" parent="."]
 offset_left = -104.0
@@ -89,7 +152,67 @@ offset_bottom = -2.0
 scale = Vector2(0.475, 0.475)
 text = "jumpBuffer:"
 
-[node name="Timer" parent="." groups=["launchable"] instance=ExtResource("8_smehm")]
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(9.6, 5.4)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="Control"]
+offset = Vector2(245, 15)
+scale = Vector2(1.5, 1.5)
+transform = Transform2D(1.5, 0, 0, 1.5, 245, 15)
+
+[node name="TimerBar" parent="Control/CanvasLayer" instance=ExtResource("8_smehm")]
+anchors_preset = -1
+anchor_left = 0.192
+anchor_right = 0.192
+offset_left = -79.8507
+offset_right = 79.1493
+offset_bottom = 39.0
+
+[node name="PostFX" type="CanvasLayer" parent="Control/CanvasLayer"]
+script = ExtResource("9_y4r1p")
+effects = Array[ExtResource("10_3v2ag")]([SubResource("Resource_3v2ag")])
+metadata/_custom_type_script = "uid://d15nobs3uuxeb"
+
+[node name="wind" type="CPUParticles2D" parent="."]
+modulate = Color(1, 1, 1, 0)
+position = Vector2(1, 0)
+amount = 200
+lifetime = 2.43
+speed_scale = 2.0
+emission_shape = 3
+emission_rect_extents = Vector2(400, 400)
+direction = Vector2(0, 0)
+spread = 180.0
+gravity = Vector2(980, 0)
+scale_amount_min = 0.5
+scale_amount_max = 2.0
+color = Color(0.720467, 0.720468, 0.720467, 1)
+color_ramp = SubResource("Gradient_smehm")
+
+[node name="dust" type="CPUParticles2D" parent="."]
+position = Vector2(0, 7)
+emitting = false
+amount = 10
+lifetime = 0.57
+one_shot = true
+randomness = 0.44
+emission_shape = 1
+emission_sphere_radius = 7.12
+direction = Vector2(0, -1)
+spread = 90.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 50.0
+initial_velocity_max = 50.0
+linear_accel_min = -43.43
+linear_accel_max = 27.27
+angle_min = -720.0
+angle_max = 720.0
+color_ramp = SubResource("Gradient_ur7pv")
+script = SubResource("GDScript_jej6c")
 
 [connection signal="timeout" from="stateMachine/jump/jump_buffer_timer" to="stateMachine/jump" method="_on_jump_buffer_timer_timeout"]
-[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="value_changed" from="Control/CanvasLayer/TimerBar" to="." method="_on_timer_bar_value_changed"]

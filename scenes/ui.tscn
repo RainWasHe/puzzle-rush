@@ -1,0 +1,30 @@
+[gd_scene load_steps=3 format=3 uid="uid://ckastas63v4c2"]
+
+[ext_resource type="Texture2D" uid="uid://bqu2wuvvwybe1" path="res://assets/images/progress_bar_not_field.png" id="1_x4jx1"]
+[ext_resource type="Texture2D" uid="uid://dyw7otp1r325l" path="res://assets/images/progress.png" id="2_yev5y"]
+
+[node name="UI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.409556
+anchor_top = 0.00149382
+anchor_right = 0.559194
+anchor_bottom = 0.0714198
+offset_left = 28.192
+offset_top = 4.03201
+offset_right = 27.808
+offset_bottom = 3.72
+grow_horizontal = 2
+nine_patch_stretch = true
+texture_under = ExtResource("1_x4jx1")
+texture_progress = ExtResource("2_yev5y")
+
+[node name="Timer" type="Timer" parent="."]

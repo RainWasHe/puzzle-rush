@@ -5,11 +5,12 @@ class_name Player
 @export var rewind_state: State
 
 @export var SPEED: float = 100.0
+@export var SLIDING_SPEED: float = 200.0
+@export var FACING: int = 1
 @onready var state_machine = $stateMachine
-@onready var replay_duration: Timer = $Timer
+@onready var replay_duration: Timer = $Control/CanvasLayer/TimerBar.timer
 @export var collision_shape: CollisionShape2D
 var rewind_actions: Dictionary = {
-	"rewindTime": [],
 	"position": [],
 	"rotation": [],
 	"velocity": [],
@@ -19,6 +20,7 @@ var rewind_actions: Dictionary = {
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 func _ready() -> void:
+	$Control/CanvasLayer/TimerBar.visible = false
 	state_machine.init(self)
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -30,7 +32,6 @@ func _physics_process(delta: float) -> void:
 		if replay_duration.wait_time * Engine.physics_ticks_per_second == rewind_actions["position"].size():
 			for key in rewind_actions.keys():
 				rewind_actions[key].pop_front()
-		rewind_actions["rewindTime"].append(replay_duration.time_left)
 		rewind_actions["position"].append(global_position)
 		rewind_actions["rotation"].append(rotation)
 		rewind_actions["velocity"].append(velocity)
@@ -41,5 +42,6 @@ func _process(delta: float) -> void:
 	state_machine.process_frame(delta)
 
 
-func _on_timer_timeout():
-	state_machine.change_state(rewind_state)
+func _on_timer_bar_value_changed(value):
+	if(value <= 0):
+		state_machine.change_state(rewind_state)

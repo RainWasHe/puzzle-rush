@@ -4,8 +4,12 @@ extends State
 @export var jump_state: State
 @export var move_state: State
 @export var rewind_state: State
+@export var slide_state: State
+@export var wind: CPUParticles2D
 
 func enter() -> void:
+	wind.emitting = false
+	wind.visible = false
 	parent.velocity.x = 0
 
 func process_input(input: InputEvent) -> State:
@@ -15,6 +19,8 @@ func process_input(input: InputEvent) -> State:
 		return move_state
 	if(input.is_action_pressed("rewind")):
 		return rewind_state
+	if(input.is_action_pressed("move_slide")):
+		return slide_state
 	return null
 func process_physics(delta: float) -> State:
 	parent.velocity.y += parent.gravity * delta

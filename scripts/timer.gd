@@ -1,6 +1,8 @@
-extends Timer
-
-@export var progressBar: ProgressBar
-
+extends TextureProgressBar
+@export var timer: Timer
+func _ready():
+	max_value = timer.wait_time
+# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	progressBar.value = time_left
+	if(visible):
+		value = timer.time_left

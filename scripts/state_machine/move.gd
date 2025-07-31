@@ -4,6 +4,9 @@ extends State
 @export var idle_state: State
 @export var jump_state: State
 @export var rewind_state: State
+@export var slide_state: State
+
+
 
 
 func process_input(input: InputEvent) -> State:
@@ -11,11 +14,16 @@ func process_input(input: InputEvent) -> State:
 		return jump_state
 	if(input.is_action_pressed("rewind")):
 		return rewind_state
+	if(input.is_action_pressed("move_slide")):
+		return slide_state
 	return null
 	
 
 func process_physics(delta: float) -> State:
 	var movement = Input.get_axis("move_left", "move_right")
+	if(movement != 0):
+		parent.FACING = movement
+
 	parent.velocity.x = movement * parent.SPEED
 	parent.move_and_slide()
 	if(!parent.is_on_floor()):
