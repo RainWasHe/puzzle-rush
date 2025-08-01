@@ -1,0 +1,3 @@
+[gd_scene format=3 uid="uid://bis3kmiywb1i2"]
+
+[node name="device" type="Area2D"]

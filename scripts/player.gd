@@ -8,7 +8,8 @@ class_name Player
 @export var SLIDING_SPEED: float = 200.0
 @export var FACING: int = 1
 @onready var state_machine = $stateMachine
-@onready var replay_duration: Timer = $Control/CanvasLayer/TimerBar.timer
+#: Timer = $Control/CanvasLayer/TimerBar.timer
+@onready var replay_duration: float = 3.0
 @export var collision_shape: CollisionShape2D
 var rewind_actions: Dictionary = {
 	"position": [],
@@ -29,7 +30,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _physics_process(delta: float) -> void:
 	if not (rewind_state.rewind):
-		if replay_duration.wait_time * Engine.physics_ticks_per_second == rewind_actions["position"].size():
+		if replay_duration * Engine.physics_ticks_per_second == rewind_actions["position"].size():
 			for key in rewind_actions.keys():
 				rewind_actions[key].pop_front()
 		rewind_actions["position"].append(global_position)

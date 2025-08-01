@@ -48,7 +48,7 @@ func _process(delta):
 	pass
 "
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("rewind_state", "collision_shape")]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("rewind_state", "collision_shape") groups=["launchable", "player"]]
 z_index = 6
 collision_layer = 7
 script = ExtResource("1_7r2uy")
