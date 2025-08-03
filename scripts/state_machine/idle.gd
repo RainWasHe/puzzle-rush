@@ -8,6 +8,11 @@ extends State
 @export var wind: CPUParticles2D
 
 func enter() -> void:
+	if(parent.CAN_REWIND):
+		parent.animationSprite.animation = "idle_mask"
+	else:
+		parent.animationSprite.animation = "idle"
+	parent.animationSprite.play()
 	wind.emitting = false
 	wind.visible = false
 	parent.velocity.x = 0
@@ -17,7 +22,7 @@ func process_input(input: InputEvent) -> State:
 		return jump_state
 	if input.is_action_pressed("move_left") or input.is_action_pressed("move_right"):
 		return move_state
-	if(input.is_action_pressed("rewind")):
+	if(input.is_action_pressed("rewind") && parent.CAN_REWIND):
 		return rewind_state
 	if(input.is_action_pressed("move_slide")):
 		return slide_state

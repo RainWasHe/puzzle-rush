@@ -1,0 +1,33 @@
+[gd_scene load_steps=4 format=3 uid="uid://4x7fttn5khul"]
+
+[ext_resource type="Texture2D" uid="uid://cp4tjdfrjuu78" path="res://assets/images/items.png" id="1_yuyoe"]
+[ext_resource type="Texture2D" uid="uid://kn15mgrefyuc" path="res://assets/images/rewindStar.png" id="2_h5pcf"]
+
+[sub_resource type="Gradient" id="Gradient_5pnn1"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[node name="RewindPoint" type="Marker2D"]
+visible = false
+z_index = 6
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_yuyoe")
+region_enabled = true
+region_rect = Rect2(128, 0, 16, 16)
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+amount = 13
+texture = ExtResource("2_h5pcf")
+lifetime = 2.18
+speed_scale = 0.35
+emission_shape = 1
+emission_sphere_radius = 13.93
+spread = 180.0
+gravity = Vector2(0, 0)
+orbit_velocity_min = -0.1
+orbit_velocity_max = 0.1
+angle_max = 180.0
+scale_amount_min = 0.3
+scale_amount_max = 0.5
+color_ramp = SubResource("Gradient_5pnn1")

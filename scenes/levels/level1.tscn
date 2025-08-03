@@ -35,7 +35,7 @@ fill_to = Vector2(0.486239, 1)
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_8a7m2"]
 
-[node name="Level1" type="Node2D"]
+[node name="Level1" type="Node2D" groups=["notRewindLevel"]]
 
 [node name="PlayerNode" parent="." instance=ExtResource("1_dywbp")]
 position = Vector2(92, 145)
@@ -68,10 +68,10 @@ tile_set = SubResource("TileSet_nkeig")
 [node name="Jumpad" parent="objects" instance=ExtResource("5_plydf")]
 position = Vector2(922, 167)
 
-[node name="door" parent="objects" node_paths=PackedStringArray("buttonArea2d") instance=ExtResource("6_8a7m2")]
+[node name="door" parent="objects" node_paths=PackedStringArray("button") instance=ExtResource("6_8a7m2")]
 position = Vector2(1349, 81)
-newScene = "res://scenes/levels/level1.tscn"
-buttonArea2d = NodePath("../button")
+newScene = "res://scenes/levels/level2.tscn"
+button = NodePath("../button")
 
 [node name="button" parent="objects" instance=ExtResource("7_plydf")]
 position = Vector2(1240, 121)

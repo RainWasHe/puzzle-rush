@@ -16,7 +16,7 @@ func process_input(input: InputEvent) -> State:
 		jump_state.jump_buffer = true
 	if (input.is_action_pressed("move_jump") && parent.is_on_floor()):
 		return jump_state
-	if(input.is_action_pressed("rewind")):
+	if(input.is_action_pressed("rewind") && parent.CAN_REWIND):
 		return rewind_state
 	return null
 # Called every frame. 'delta' is the elapsed time since the previous frame.

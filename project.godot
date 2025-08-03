@@ -23,6 +23,7 @@ enabled=PackedStringArray("res://addons/postfx/plugin.cfg")
 
 launchable=""
 player=""
+notRewindLevel=""
 
 [input]
 

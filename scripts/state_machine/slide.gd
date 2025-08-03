@@ -12,16 +12,19 @@ extends State
 
 
 func enter() -> void:
-	slidePolygon.visible = true
-	normalPolygon.visible = false
-	
+	if(parent.CAN_REWIND):
+		parent.animationSprite.animation = "slide_mask"
+	else:
+		parent.animationSprite.animation = "slide"
+	if(parent.FACING == 1):
+		parent.animationSprite.flip_h = false
+	else:
+		parent.animationSprite.flip_h = true
+	parent.animationSprite.play()
 	slideHitbox.disabled = false
 	normalHitbox.disabled = true
 
 func exit() -> void:
-	slidePolygon.visible = false
-	normalPolygon.visible = true
-
 	slideHitbox.disabled = true
 	normalHitbox.disabled = false
 
@@ -30,7 +33,7 @@ func process_input(input: InputEvent) -> State:
 		return jump_state
 	if input.is_action_released("move_slide"):
 		return move_state
-	if(input.is_action_pressed("rewind")):
+	if(input.is_action_pressed("rewind") && parent.CAN_REWIND):
 		return rewind_state
 	return null
 

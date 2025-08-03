@@ -11,6 +11,15 @@ extends State
 var jump_buffer: bool = false
 
 func enter() -> void:
+	if(parent.CAN_REWIND):
+		parent.animationSprite.animation = "jump_mask"
+	else:
+		parent.animationSprite.animation = "jump"
+	if(parent.FACING == 1):
+		parent.animationSprite.flip_h = false
+	else:
+		parent.animationSprite.flip_h = true
+		parent.animationSprite.play()
 	dust.emitting = true
 	parent.velocity.y = -jump_force
 	jump_buffer = false
@@ -20,7 +29,7 @@ func process_input(input: InputEvent) -> State:
 		jump_buffer = true
 		jump_buffer_timer.start()
 		return null
-	if(input.is_action_pressed("rewind")):
+	if(input.is_action_pressed("rewind") && parent.CAN_REWIND):
 		return rewind_state
 	return null
 
