@@ -1,6 +1,7 @@
-[gd_scene load_steps=16 format=4 uid="uid://dwfkrv608r4ua"]
+[gd_scene load_steps=21 format=4 uid="uid://dwfkrv608r4ua"]
 
 [ext_resource type="PackedScene" uid="uid://cy6u0hichvs3r" path="res://scenes/player.tscn" id="1_dywbp"]
+[ext_resource type="Script" uid="uid://dp8lbwc5cfakf" path="res://scenes/levels/level_1.gd" id="1_nkeig"]
 [ext_resource type="PackedScene" uid="uid://dlhq4181xfr72" path="res://scenes/camera.tscn" id="2_1seuy"]
 [ext_resource type="TileSet" uid="uid://fo421osa4jp1" path="res://assets/tilemap_bg.tres" id="3_1seuy"]
 [ext_resource type="PackedScene" uid="uid://dmkd7ld6lgdqy" path="res://scenes/cube.tscn" id="4_8a7m2"]
@@ -10,6 +11,58 @@
 [ext_resource type="PackedScene" uid="uid://bkl28sod2lvp3" path="res://scenes/door.tscn" id="6_8a7m2"]
 [ext_resource type="PackedScene" uid="uid://dhr265spq368q" path="res://scenes/killzone.tscn" id="7_2r1tl"]
 [ext_resource type="PackedScene" uid="uid://c8mnf1xcgimw6" path="res://scenes/button.tscn" id="7_plydf"]
+
+[sub_resource type="Animation" id="Animation_6qf5j"]
+resource_name = "blackout"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_lt4mj"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_w6ftq"]
+resource_name = "whiteout"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(0, 0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_dexxl"]
+_data = {
+&"RESET": SubResource("Animation_lt4mj"),
+&"blackout": SubResource("Animation_6qf5j"),
+&"whiteout": SubResource("Animation_w6ftq")
+}
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5ntmo"]
 texture = ExtResource("4_plydf")
@@ -35,7 +88,9 @@ fill_to = Vector2(0.486239, 1)
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_8a7m2"]
 
-[node name="Level1" type="Node2D" groups=["notRewindLevel"]]
+[node name="Level1" type="Node2D" node_paths=PackedStringArray("overlayScreen") groups=["notRewindLevel"]]
+script = ExtResource("1_nkeig")
+overlayScreen = NodePath("PlayerNode/overlayScreen/AnimationPlayer")
 
 [node name="PlayerNode" parent="." instance=ExtResource("1_dywbp")]
 position = Vector2(92, 145)
@@ -44,6 +99,20 @@ scale = Vector2(1.3074, 1.3074)
 [node name="Camera2" parent="PlayerNode" instance=ExtResource("2_1seuy")]
 position = Vector2(5.96046e-08, -16)
 scale = Vector2(-100.976, 40.7696)
+
+[node name="overlayScreen" type="ColorRect" parent="PlayerNode"]
+z_index = 7
+offset_left = -547.652
+offset_top = -377.849
+offset_right = -507.652
+offset_bottom = -337.849
+scale = Vector2(55.8329, 32.1974)
+color = Color(0, 0, 0, 0)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="PlayerNode/overlayScreen"]
+libraries = {
+&"": SubResource("AnimationLibrary_dexxl")
+}
 
 [node name="grounds" type="Node" parent="."]
 
@@ -77,7 +146,7 @@ button = NodePath("../button")
 position = Vector2(1240, 121)
 
 [node name="Cube" parent="objects" instance=ExtResource("4_8a7m2")]
-position = Vector2(1322, 120)
+position = Vector2(1273, 121)
 
 [node name="lamp" parent="." instance=ExtResource("6_1seuy")]
 position = Vector2(521, 2)

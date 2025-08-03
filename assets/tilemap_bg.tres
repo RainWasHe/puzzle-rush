@@ -43,6 +43,9 @@ texture = ExtResource("1_byol2")
 4:2/0 = 0
 4:3/size_in_atlas = Vector2i(3, 3)
 4:3/0 = 0
+0:3/0 = 0
+0:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+0:3/0/physics_layer_0/polygon_0/one_way = true
 
 [resource]
 physics_layer_0/collision_layer = 3

@@ -1,5 +1,6 @@
-[gd_scene load_steps=14 format=4 uid="uid://dts7c0rdb6iuu"]
+[gd_scene load_steps=19 format=4 uid="uid://dts7c0rdb6iuu"]
 
+[ext_resource type="Script" uid="uid://bwm8an62yl7gj" path="res://scenes/levels/level_2.gd" id="1_gycjm"]
 [ext_resource type="PackedScene" uid="uid://cy6u0hichvs3r" path="res://scenes/player.tscn" id="1_niitk"]
 [ext_resource type="PackedScene" uid="uid://dlhq4181xfr72" path="res://scenes/camera.tscn" id="2_d5djh"]
 [ext_resource type="TileSet" uid="uid://fo421osa4jp1" path="res://assets/tilemap_bg.tres" id="3_ok6xr"]
@@ -11,7 +12,59 @@
 [ext_resource type="PackedScene" uid="uid://c8mnf1xcgimw6" path="res://scenes/button.tscn" id="9_gycjm"]
 [ext_resource type="PackedScene" uid="uid://dmkd7ld6lgdqy" path="res://scenes/cube.tscn" id="10_8i1lk"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8qukl"]
+[sub_resource type="Animation" id="Animation_6qf5j"]
+resource_name = "blackout"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_lt4mj"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_w6ftq"]
+resource_name = "whiteout"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(0, 0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_dexxl"]
+_data = {
+&"RESET": SubResource("Animation_lt4mj"),
+&"blackout": SubResource("Animation_6qf5j"),
+&"whiteout": SubResource("Animation_w6ftq")
+}
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_oyk6k"]
 texture = ExtResource("4_dj4wq")
 0:0/size_in_atlas = Vector2i(9, 2)
 0:0/0 = 0
@@ -21,11 +74,13 @@ texture = ExtResource("4_dj4wq")
 1:5/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_3p04p"]
-sources/0 = SubResource("TileSetAtlasSource_8qukl")
+sources/0 = SubResource("TileSetAtlasSource_oyk6k")
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_k0mew"]
 
-[node name="level2" type="Node2D" groups=["notRewindLevel"]]
+[node name="level2" type="Node2D" node_paths=PackedStringArray("overlayScreen") groups=["notRewindLevel"]]
+script = ExtResource("1_gycjm")
+overlayScreen = NodePath("PlayerNode/overlayScreen/AnimationPlayer")
 metadata/time = 15.0
 
 [node name="PlayerNode" parent="." instance=ExtResource("1_niitk")]
@@ -35,6 +90,20 @@ scale = Vector2(1.3074, 1.3074)
 [node name="Camera2" parent="PlayerNode" instance=ExtResource("2_d5djh")]
 position = Vector2(5.96046e-08, -16)
 scale = Vector2(-100.976, 40.7696)
+
+[node name="overlayScreen" type="ColorRect" parent="PlayerNode"]
+z_index = 7
+offset_left = -356.433
+offset_top = -346.489
+offset_right = -316.433
+offset_bottom = -306.489
+scale = Vector2(52.7505, 26.394)
+color = Color(0, 0, 0, 0)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="PlayerNode/overlayScreen"]
+libraries = {
+&"": SubResource("AnimationLibrary_dexxl")
+}
 
 [node name="grounds" type="Node" parent="."]
 
@@ -65,7 +134,7 @@ position = Vector2(508, 169)
 
 [node name="objects" type="Node" parent="."]
 
-[node name="Jumpad" parent="objects" instance=ExtResource("7_dj4wq")]
+[node name="Jumpad" parent="objects" groups=["notRewindLevel"] instance=ExtResource("7_dj4wq")]
 position = Vector2(375, 166)
 
 [node name="button" parent="objects" instance=ExtResource("9_gycjm")]
@@ -73,7 +142,7 @@ position = Vector2(1620, 154)
 
 [node name="door" parent="objects" node_paths=PackedStringArray("button") instance=ExtResource("8_oyk6k")]
 position = Vector2(1007, 145)
-newScene = "res://scenes/levels/level2.tscn"
+newScene = "res://scenes/levels/level_3.tscn"
 button = NodePath("../button")
 
 [node name="Cube" parent="objects" instance=ExtResource("10_8i1lk")]

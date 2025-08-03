@@ -1,4 +1,4 @@
-[gd_scene load_steps=68 format=3 uid="uid://cy6u0hichvs3r"]
+[gd_scene load_steps=70 format=3 uid="uid://cy6u0hichvs3r"]
 
 [ext_resource type="Script" uid="uid://ca1tiuj460ajy" path="res://scripts/player.gd" id="1_7r2uy"]
 [ext_resource type="Texture2D" uid="uid://ius01gs8bg4w" path="res://assets/images/player.png" id="2_f1ej7"]
@@ -14,6 +14,7 @@
 [ext_resource type="Script" uid="uid://bvbw3ejkm2bck" path="res://addons/postfx/scripts/FXBase.gd" id="10_3v2ag"]
 [ext_resource type="PackedScene" uid="uid://dvs3rj6anhwy3" path="res://scenes/stopwatch.tscn" id="10_f1ej7"]
 [ext_resource type="Script" uid="uid://cqqc7s7kp8uem" path="res://addons/postfx/effects/VignetteFX.gd" id="11_jej6c"]
+[ext_resource type="Shader" uid="uid://c3uoku03kmoe4" path="res://scenes/levels/grayscale.gdshader" id="15_oprun"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_60mlk"]
 atlas = ExtResource("2_f1ej7")
@@ -400,6 +401,9 @@ color = Color(0, 0, 0, 1)
 enabled = true
 metadata/_custom_type_script = "uid://cqqc7s7kp8uem"
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_a8ls1"]
+shader = ExtResource("15_oprun")
+
 [sub_resource type="Gradient" id="Gradient_smehm"]
 offsets = PackedFloat32Array(0.26, 1)
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
@@ -435,11 +439,10 @@ disabled = true
 [node name="normalHitbox" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_xwa2j")
 
-[node name="stateMachine" type="Node" parent="." node_paths=PackedStringArray("starting_state", "current_state", "text")]
+[node name="stateMachine" type="Node" parent="." node_paths=PackedStringArray("starting_state", "current_state")]
 script = ExtResource("2_g2els")
 starting_state = NodePath("idle")
 current_state = NodePath("idle")
-text = NodePath("../TextEdit")
 
 [node name="idle" type="Node" parent="stateMachine" node_paths=PackedStringArray("fall_state", "jump_state", "move_state", "rewind_state", "slide_state", "wind")]
 script = ExtResource("3_qhqgy")
@@ -479,12 +482,13 @@ jump_state = NodePath("../jump")
 rewind_state = NodePath("../rewind")
 slide_state = NodePath("../slide")
 
-[node name="rewind" type="Node" parent="stateMachine" node_paths=PackedStringArray("fall_state", "move_state", "idle_state", "stopwatch") groups=["launchable", "player"]]
+[node name="rewind" type="Node" parent="stateMachine" node_paths=PackedStringArray("fall_state", "move_state", "idle_state", "stopwatch", "greyscale") groups=["launchable", "player"]]
 script = ExtResource("7_fjrip")
 fall_state = NodePath("../fall")
 move_state = NodePath("../move")
 idle_state = NodePath("../idle")
 stopwatch = NodePath("Stopwatch")
+greyscale = NodePath("../../Control/CanvasLayer/grayScale")
 
 [node name="Stopwatch" parent="stateMachine/rewind" instance=ExtResource("10_f1ej7")]
 stopped = true
@@ -496,22 +500,6 @@ normalHitbox = NodePath("../../normalHitbox")
 jump_state = NodePath("../jump")
 move_state = NodePath("../move")
 rewind_state = NodePath("../rewind")
-
-[node name="TextEdit" type="TextEdit" parent="."]
-offset_left = -104.0
-offset_top = -39.0
-offset_right = 76.0
-offset_bottom = -4.0
-scale = Vector2(0.475, 0.475)
-text = "State:"
-
-[node name="TextEdit2" type="TextEdit" parent="."]
-offset_left = 21.0
-offset_top = -39.0
-offset_right = 201.0
-offset_bottom = -2.0
-scale = Vector2(0.475, 0.475)
-text = "jumpBuffer:"
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
@@ -537,6 +525,22 @@ offset_bottom = 39.0
 script = ExtResource("9_y4r1p")
 effects = Array[ExtResource("10_3v2ag")]([SubResource("Resource_3v2ag")])
 metadata/_custom_type_script = "uid://d15nobs3uuxeb"
+
+[node name="grayScale" type="ColorRect" parent="Control/CanvasLayer" groups=["notRewindLevel"]]
+visible = false
+z_index = 7
+material = SubResource("ShaderMaterial_a8ls1")
+anchors_preset = -1
+anchor_left = -0.141
+anchor_top = -0.015
+anchor_right = -0.141
+anchor_bottom = -0.015
+offset_left = -910.235
+offset_top = -326.947
+offset_right = -142.235
+offset_bottom = 105.053
+grow_horizontal = 2
+scale = Vector2(4.25333, 4.30667)
 
 [node name="wind" type="CPUParticles2D" parent="."]
 modulate = Color(1, 1, 1, 0)

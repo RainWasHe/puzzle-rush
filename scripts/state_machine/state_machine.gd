@@ -18,7 +18,6 @@ func change_state(new_state: State) -> void:
 	
 	current_state = new_state
 	current_state.enter()
-	text.text = str(current_state.name)
 func process_physics(delta):
 	var new_state = current_state.process_physics(delta)
 	if new_state:

@@ -4,6 +4,7 @@ extends Area2D
 @export var collisionShape: CollisionShape2D
 @export var newScene: String
 @export var button: PressableButton
+@export var overlayScreen: AnimationPlayer
 
 func _process(delta):
 	if(button.active):
@@ -16,4 +17,8 @@ func _process(delta):
 
 func _on_body_entered(body):
 	if (!collisionShape.disabled and body.is_in_group("player")):
-		get_tree().change_scene_to_file(newScene)
+		overlayScreen.play("blackout")
+
+
+func _on_animation_player_animation_finished(anim_name: StringName) -> void:
+	get_tree().change_scene_to_file(newScene)

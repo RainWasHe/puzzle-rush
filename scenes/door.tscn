@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bkl28sod2lvp3"]
+[gd_scene load_steps=11 format=3 uid="uid://bkl28sod2lvp3"]
 
 [ext_resource type="Script" uid="uid://c8nxt7lfuqb6n" path="res://scripts/door_anitial.gd" id="1_uvdjg"]
 [ext_resource type="Texture2D" uid="uid://cp4tjdfrjuu78" path="res://assets/images/items.png" id="2_83dcw"]
@@ -33,9 +33,62 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hpvv5"]
 size = Vector2(16, 32)
 
-[node name="door" type="Area2D" node_paths=PackedStringArray("collisionShape")]
+[sub_resource type="Animation" id="Animation_6qf5j"]
+resource_name = "blackout"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_lt4mj"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_w6ftq"]
+resource_name = "whiteout"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(0, 0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_dexxl"]
+_data = {
+&"RESET": SubResource("Animation_lt4mj"),
+&"blackout": SubResource("Animation_6qf5j"),
+&"whiteout": SubResource("Animation_w6ftq")
+}
+
+[node name="door" type="Area2D" node_paths=PackedStringArray("collisionShape", "overlayScreen")]
 script = ExtResource("1_uvdjg")
 collisionShape = NodePath("CollisionShape2D")
+overlayScreen = NodePath("overlayScreen/AnimationPlayer")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_q5w8r")
@@ -44,5 +97,20 @@ autoplay = "default"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_hpvv5")
 
+[node name="overlayScreen" type="ColorRect" parent="."]
+z_index = 7
+offset_left = -1182.0
+offset_top = -440.0
+offset_right = -1142.0
+offset_bottom = -400.0
+scale = Vector2(62.2219, 29.7332)
+color = Color(0, 0, 0, 0)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="overlayScreen"]
+libraries = {
+&"": SubResource("AnimationLibrary_dexxl")
+}
+
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="animation_finished" from="overlayScreen/AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

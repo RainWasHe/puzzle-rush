@@ -11,9 +11,9 @@ config_version=5
 [application]
 
 config/name="Puzzle Rush"
-run/main_scene="res://scenes/levels/level1.tscn"
+run/main_scene="uid://dwfkrv608r4ua"
 config/features=PackedStringArray("4.4", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="uid://bcwaklnwyilnp"
 
 [editor_plugins]
 
@@ -56,3 +56,4 @@ move_slide={
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0
+2d/snap/snap_2d_transforms_to_pixel=true

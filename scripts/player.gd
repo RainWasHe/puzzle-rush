@@ -20,6 +20,9 @@ var rewind_actions: Dictionary = {
 	"position": [],
 	"rotation": [],
 	"velocity": [],
+	"frame": [],
+	"animation": [],
+	"flip_h": [],
 }
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
@@ -29,7 +32,6 @@ func _ready() -> void:
 	get_tree().current_scene.add_child.call_deferred(rewindingPoint)
 	if(get_tree().current_scene.is_in_group("notRewindLevel")):
 		CAN_REWIND = false
-	if(!CAN_REWIND):
 		$Control/CanvasLayer/TimerBar.visible = false
 	state_machine.init(self)
 
@@ -38,22 +40,24 @@ func _unhandled_input(event: InputEvent) -> void:
 	
 
 func _physics_process(delta: float) -> void:
+	#print(animationSprite.frame_progress)
 	if (!rewind_state.rewind && CAN_REWIND && !stopwatch.stopped): 
 		#if replay_duration * Engine.physics_ticks_per_second == rewind_actions["position"].size():
 			#for key in rewind_actions.keys():
 				#rewind_actions[key].pop_front()
+		rewind_actions["frame"].append(animationSprite.frame)
+		rewind_actions["animation"].append(animationSprite.animation)
+		rewind_actions["flip_h"].append(animationSprite.flip_h)
 		rewind_actions["position"].append(global_position)
 		rewind_actions["rotation"].append(rotation)
 		rewind_actions["velocity"].append(velocity)
 	state_machine.process_physics(delta)
 
 func _process(delta: float) -> void:
-	$TextEdit2.text = str($stateMachine/jump.jump_buffer)
 	state_machine.process_frame(delta)
 
 
 func _on_timer_bar_value_changed(value):
-	print(value)
 	if(value <= 0 && CAN_REWIND && !rewind_state.rewind):
 		get_tree().reload_current_scene()
 		#stopwatch.stopped = true
