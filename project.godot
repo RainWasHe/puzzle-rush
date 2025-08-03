@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Puzzle Rush"
-run/main_scene="uid://dwfkrv608r4ua"
+run/main_scene="uid://bjxuxfga63fdd"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="uid://bcwaklnwyilnp"
 

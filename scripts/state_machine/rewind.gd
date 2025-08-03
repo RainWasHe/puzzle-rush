@@ -7,6 +7,7 @@ extends State
 @onready var timer: Timer = $"../../Control/CanvasLayer/TimerBar".timer
 @export var stopwatch: Stopwatch
 @export var greyscale: ColorRect
+@export var arrow: Sprite2D
 var rewind: bool = false
 
 var lastVelocities: Array
@@ -14,6 +15,7 @@ var maxVelocity: Vector2
 
 func enter() -> void:
 	if(!stopwatch.stopped):
+		arrow.visible = true
 		greyscale.visible = true
 		stopwatch.stopped = true
 		parent.rewindingPoint.visible = false
@@ -50,6 +52,7 @@ func process_physics(delta) -> State:
 			parent.animationSprite.flip_h = flip_h
 			parent.velocity += maxVelocity / 2
 			maxVelocity = Vector2(0, 0)
+			arrow.visible = false
 			
 			timer.wait_time = timer.wait_time - (stopwatch.time + 0.5)
 			stopwatch.time = 0.0
